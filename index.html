@@ -723,6 +723,9 @@
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.75s ease, transform 0.75s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
+  /* ── MOBILE STICKY ACTION BAR (mobile only) ── */
+  .mobile-action-bar { display: none; }
+
   /* ── MOBILE ── */
   @media (max-width: 860px) {
     nav { padding: 0 4%; }
@@ -749,6 +752,34 @@
     .trust-divider { display: none; }
     footer { flex-direction: column; text-align: center; }
     .footer-right { text-align: center; }
+
+    /* Reserve space for sticky action bar */
+    body { padding-bottom: 64px; }
+
+    .mobile-action-bar {
+      position: fixed; top: auto; bottom: 0; left: 0; right: 0; z-index: 250;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      height: auto;
+      background: rgba(2, 15, 70, 0.96);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(149, 178, 221, 0.18);
+      border-bottom: none;
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+      padding: 0.35rem 0.25rem calc(0.35rem + env(safe-area-inset-bottom));
+    }
+    .mobile-action-bar a {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.1rem; padding: 0.45rem 0.25rem;
+      text-decoration: none; color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.09em; text-transform: uppercase;
+      border-radius: 6px; transition: background 0.15s;
+    }
+    .mobile-action-bar a:active { background: rgba(149, 178, 221, 0.12); }
+    .mab-icon { font-size: 1.25rem; line-height: 1; margin-bottom: 0.15rem; }
+    .mab-call    .mab-icon { color: var(--mid); }
+    .mab-text    .mab-icon { color: var(--mint); }
+    .mab-message .mab-icon { color: var(--amber-l); }
   }
 </style>
 </head>
@@ -766,6 +797,7 @@
     </div>
   </a>
   <ul class="nav-links">
+    <li><a href="sms:+15618603670">Text</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#maintenance">Maintenance</a></li>
     <li><a href="#reviews">Reviews</a></li>
@@ -1142,6 +1174,22 @@
   <div class="footer-right">(561) 860-3670<br>office@majortomsair.com</div>
 </footer>
 
+<!-- Mobile sticky action bar (hidden on desktop) -->
+<nav class="mobile-action-bar" aria-label="Quick contact">
+  <a href="tel:5618603670" class="mab-call" aria-label="Call Major Tom's Air at (561) 860-3670">
+    <span class="mab-icon" aria-hidden="true">☎</span>
+    <span>Call</span>
+  </a>
+  <a href="sms:+15618603670" class="mab-text" aria-label="Text Major Tom's Air at (561) 860-3670">
+    <span class="mab-icon" aria-hidden="true">💬</span>
+    <span>Text</span>
+  </a>
+  <a href="#contact" class="mab-message" aria-label="Jump to the contact form">
+    <span class="mab-icon" aria-hidden="true">✉</span>
+    <span>Message</span>
+  </a>
+</nav>
+
 <script>
 // Stars
 const canvas = document.getElementById('starCanvas');
@@ -1182,7 +1230,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 if (new URLSearchParams(location.search).get('sent') === '1') {
   const toast = document.createElement('div');
   toast.textContent = '✓ Message sent. We will be in touch within 24 hours.';
-  toast.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#60c2aa;color:#050c18;padding:0.9rem 1.4rem;border-radius:8px;font-family:Instrument Sans,sans-serif;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.35);z-index:10000';
+  toast.style.cssText = 'position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%);background:#60c2aa;color:#050c18;padding:0.9rem 1.4rem;border-radius:8px;font-family:Instrument Sans,sans-serif;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.35);z-index:10000';
   document.body.appendChild(toast);
   setTimeout(()=>toast.remove(), 6000);
 }
